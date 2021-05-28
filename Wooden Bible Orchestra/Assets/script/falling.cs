@@ -15,6 +15,7 @@ public class falling : MonoBehaviour
     public Rigidbody2D postacP3;
 
     private float speed = 10f;
+    
     private int czy;
     public Collider2D pod;
     Rigidbody2D instance;
@@ -25,6 +26,9 @@ public class falling : MonoBehaviour
     private int takczynie;
     public GameObject gameOverPanel;
     public Text endScore;
+
+    private float countdownTime=5;
+    public Text countdownDisplay;
     // Start is called before the first frame update
     void Start()
     {
@@ -34,8 +38,9 @@ public class falling : MonoBehaviour
 
     void Update()
     {
-            
-            int kt;
+        countdownTime -= Time.deltaTime*(float)1.20;
+        countdownDisplay.text = countdownTime.ToString();
+        int kt;
         if (czy == 0)
         {
             kt = Random.Range(0, 100);
@@ -79,7 +84,8 @@ public class falling : MonoBehaviour
         if (instance.IsTouching(DrzwiL))
         {
             if (takczynie == 0) { 
-                points += 1; 
+                points += 1;
+                countdownTime += 1;
             }
             else
             {
@@ -96,6 +102,7 @@ public class falling : MonoBehaviour
             if (takczynie == 1)
             {
                 points += 1;
+                countdownTime += 1;
             }
             else
             {
@@ -106,7 +113,11 @@ public class falling : MonoBehaviour
             czy = 0;
 
         }
-
+        if(countdownTime < 0)
+        {
+            countdownDisplay.text = "0";
+            koniec();
+        }
         pointText.text = "score: " + points.ToString();
     }
 

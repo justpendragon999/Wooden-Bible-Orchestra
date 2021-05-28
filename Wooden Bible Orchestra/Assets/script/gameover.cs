@@ -8,6 +8,8 @@ public class gameover : MonoBehaviour
     public void RestartGame()
     {
         SceneManager.LoadScene(1);
+        Time.timeScale = 1f;
+
     }
 
 }
