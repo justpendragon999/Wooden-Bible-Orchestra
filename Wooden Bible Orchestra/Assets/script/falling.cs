@@ -6,17 +6,17 @@ using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class falling : MonoBehaviour
-{
-    public Rigidbody2D postacL1;
-    public Rigidbody2D postacL2;
+{ 
+    public List<Rigidbody2D> postacL;
+    public List<Rigidbody2D> postacP;
 
-    public Rigidbody2D postacP1;
-    public Rigidbody2D postacP2;
-    public Rigidbody2D postacP3;
-
-    private float speed = 10f;
+    public float speed = 20f;
+    public int kiedySzybciej = 2;
+    public int pierwszeSzybciej = 2;
+    public float oIleSzybciej = 5f;
+    public float poczatkowaSzybkosc = 1f;
     
-    private int czy;
+    private int czyTworzycInstance;
     public Collider2D pod;
     Rigidbody2D instance;
     private int points = 0;
@@ -27,55 +27,41 @@ public class falling : MonoBehaviour
     public GameObject gameOverPanel;
     public Text endScore;
 
-    private float countdownTime=5;
+    public float countdownTime=5;
     public Text countdownDisplay;
-    // Start is called before the first frame update
+
     void Start()
     {
         gameOverPanel.gameObject.SetActive(false);
-        czy = 0;
+        czyTworzycInstance = 0;
     }
 
     void Update()
     {
-        countdownTime -= Time.deltaTime*(float)1.20;
+        countdownTime -= Time.deltaTime*poczatkowaSzybkosc;
         countdownDisplay.text = countdownTime.ToString();
         int kt;
-        if (czy == 0)
+        if (czyTworzycInstance == 0)
         {
             kt = Random.Range(0, 100);
             if (kt > 50)
             {
-                
-                if (kt > 70)
-                {
-                    instance = Instantiate(postacL2, transform);
-                }
-                else
-                {
-                    instance = Instantiate(postacL1, transform);
-                }
-                czy = 1;
+                int postac = Random.Range(0, postacL.Count);
+
+                instance = Instantiate(postacL[postac], transform);
+
+                czyTworzycInstance = 1;
                 instance.velocity = Vector2.down * speed;
                 takczynie = 0;
             }
             if (kt <= 50)
             {
-                if (kt > 35)
-                {
-                    instance = Instantiate(postacP2, transform);
-                }
-                else if(kt>15 && kt < 35)
-                {
-                    instance = Instantiate(postacP3, transform);
+                int postac = Random.Range(0, postacP.Count);
 
-                }
-                else
-                {
-                    instance = Instantiate(postacP1, transform);
+                instance = Instantiate(postacP[postac], transform);
 
-                }
-                czy = 1;
+
+                czyTworzycInstance = 1;
                 instance.velocity = Vector2.down * speed;
                 takczynie = 1;
             }
@@ -86,6 +72,7 @@ public class falling : MonoBehaviour
             if (takczynie == 0) { 
                 points += 1;
                 countdownTime += 1;
+                MoveSpeed();
             }
             else
             {
@@ -93,7 +80,7 @@ public class falling : MonoBehaviour
             }
 
             Destroy(instance.gameObject,1);
-            czy = 0;
+            czyTworzycInstance = 0;
             
         }
 
@@ -103,6 +90,7 @@ public class falling : MonoBehaviour
             {
                 points += 1;
                 countdownTime += 1;
+                MoveSpeed();
             }
             else
             {
@@ -110,7 +98,7 @@ public class falling : MonoBehaviour
             }
 
             Destroy(instance.gameObject, 1);
-            czy = 0;
+            czyTworzycInstance = 0;
 
         }
         if(countdownTime < 0)
@@ -119,7 +107,11 @@ public class falling : MonoBehaviour
             koniec();
         }
         pointText.text = "score: " + points.ToString();
+
+
+        
     }
+    
 
     private void koniec()
     {
@@ -142,6 +134,16 @@ public class falling : MonoBehaviour
         {
             instance.velocity = Vector2.right * speed;
             
+        }
+    }
+    private void MoveSpeed()
+    {
+        if (points == pierwszeSzybciej)
+        {
+            speed += 1;
+            poczatkowaSzybkosc += oIleSzybciej;
+
+            pierwszeSzybciej += kiedySzybciej;
         }
     }
 }
