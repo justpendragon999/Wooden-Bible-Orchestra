@@ -23,7 +23,7 @@ public class falling : MonoBehaviour
     public Text pointText;
     public Collider2D DrzwiL;
     public Collider2D DrzwiP;
-    private int takczynie;
+    private int czyWLewo;
     public GameObject gameOverPanel;
     public Text endScore;
 
@@ -52,7 +52,7 @@ public class falling : MonoBehaviour
 
                 czyTworzycInstance = 1;
                 instance.velocity = Vector2.down * speed;
-                takczynie = 0;
+                czyWLewo = 0;
             }
             if (kt <= 50)
             {
@@ -63,13 +63,13 @@ public class falling : MonoBehaviour
 
                 czyTworzycInstance = 1;
                 instance.velocity = Vector2.down * speed;
-                takczynie = 1;
+                czyWLewo = 1;
             }
         }
 
         if (instance.IsTouching(DrzwiL))
         {
-            if (takczynie == 0) { 
+            if (czyWLewo == 0) { 
                 points += 1;
                 countdownTime += 1;
                 MoveSpeed();
@@ -86,7 +86,7 @@ public class falling : MonoBehaviour
 
         if (instance.IsTouching(DrzwiP))
         {
-            if (takczynie == 1)
+            if (czyWLewo == 1)
             {
                 points += 1;
                 countdownTime += 1;
@@ -115,7 +115,7 @@ public class falling : MonoBehaviour
 
     private void koniec()
     {
-        endScore.text = "Your score:"+points.ToString();
+        endScore.text = "Your score:\n"+points.ToString();
         gameOverPanel.gameObject.SetActive(true);
         Destroy(gameObject);
     }
